@@ -39,7 +39,7 @@ const TicTacToeGame = () => {
     if (!login) {
       alert("Please enter login");
     } else {
-      fetch(url + "/game/start", {
+      fetch(url  + "/game/start", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -2,7 +2,7 @@ version: '3.0'
 services:
   backend:
     build:
-      context: ./tic-tac-toe
+      context: ./backend
       dockerfile: ./Dockerfile
     container_name: ttt_backend
     ports:
@@ -12,7 +12,7 @@ services:
     depends_on:
       - backend
     build:
-      context: ./ttt_front
+      context: ./frontend
       dockerfile: ./Dockerfile
     container_name: ttt_front
     ports:

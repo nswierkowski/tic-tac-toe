@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY package.json .
 
+ENV REACT_APP_API_URL=http://44.223.13.208:8080
+
 RUN npm install
 RUN npm install axios
 RUN npm install @stomp/stompjs --save
