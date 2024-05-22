@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import Signup from './Signup';
 
 const url = process.env.REACT_APP_API_URL;
 console.log(`url = ${url}`)
@@ -143,6 +144,7 @@ const TicTacToeGame = () => {
 
   return (
     <div>
+      <Signup />
       <input type="text" id="login" placeholder="Enter login" />
       <button onClick={createGame}>Create Game</button>
       <button onClick={connectToRandom}>Connect to Random Game</button>
