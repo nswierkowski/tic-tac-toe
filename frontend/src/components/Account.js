@@ -1,6 +1,6 @@
 import React, {createContext} from "react";
 import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
-import Pool from "../UserPool";
+import Pool from "./cognito/UserPool";
 
 const AccountContext = createContext();
 
@@ -62,7 +62,7 @@ const Account = (props) => {
         }
     };
 
-    return <AccountContext.Provider value={ {authenticate, getSession} }>
+    return <AccountContext.Provider value={ {authenticate, getSession, logout} }>
         {props.children}
     </AccountContext.Provider>
 };

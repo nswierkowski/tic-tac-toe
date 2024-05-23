@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import UserPool from "../UserPool"
+import UserPool from "./cognito/UserPool"
+import '../css/style.css'
 
 function Signup() {
     const [email, setEmail] = useState("");
@@ -14,22 +15,35 @@ function Signup() {
                 console.error(err);
             } 
             console.log(data);
+
+            const code = prompt('Your verification code: ', '');
+            if (code) {
+                data.user.confirmRegistration(code, false, (err, _) => {
+                    if (err) {
+                        alert(err.message)
+                    }
+                });
+            }
         });
     }
 
     return (
         <div>
-            <label>Log in to play a game!</label>
+            <label className="text-color">Sign up to play a game!</label>
             <form onSubmit={onSubmit}>
-                <label htmlFor="login">Login</label>
                 <input 
                     value={email} 
-                    onChange={(event) => setEmail(event.target.value)}>
+                    onChange={(event) => setEmail(event.target.value)}
+                    type="text" 
+                    placeholder="Enter email"
+                >
                 </input>
-                <label htmlFor="password">Password</label>
                 <input 
                     value={password} 
-                    onChange={(event) => setPassword(event.target.value)}>
+                    onChange={(event) => setPassword(event.target.value)}
+                    type="password" 
+                    placeholder="Enter password"
+                    >
                 </input>
 
                 <button type="submit">Sign up</button>

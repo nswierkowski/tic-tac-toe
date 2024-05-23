@@ -4,19 +4,27 @@ import TicTacToeGame from './components/socket_js.js';
 import { Account } from './components/Account.js';
 import Signup from './components/Signup.js';
 import Login from './components/Login.js';
+import DropDownComponent from './components/DropDownLogin.js';
+import DropDownLogin from './components/DropDownLogin.js';
+import DropDownSignup from './components/DropDownSignup.js';
+import DropDownTicTacToe from './components/DropDownTicTacToe.js';
+import Status from './components/Status.js';
 
 
 function App() {
   return (
     <div className="text-center" id="box">
-      <Account>
-        <Signup />
-        <Login />
-      </Account>
       <header>
           <h1>Play Tic Tac Toe</h1>
       </header>
-      <TicTacToeGame></TicTacToeGame>
+      <Account>
+        <div className="log-sign-container">
+          {/* <Status /> */}
+          <DropDownLogin />
+          <DropDownSignup />
+        </div>
+      </Account>
+      <DropDownTicTacToe />
     </div>
   );
 }

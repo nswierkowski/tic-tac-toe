@@ -10,6 +10,7 @@ RUN npm install
 RUN npm install axios
 RUN npm install @stomp/stompjs --save
 RUN npm install sockjs-client --save
+RUN npm install amazon-cognito-identity-js
 
 COPY . .
 

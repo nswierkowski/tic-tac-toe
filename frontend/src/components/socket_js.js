@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
-import Signup from './Signup';
+import tryRefreshSessionToken from './cognito/Cognito';
 
 const url = process.env.REACT_APP_API_URL;
 console.log(`url = ${url}`)
@@ -35,21 +35,40 @@ const TicTacToeGame = () => {
     };
   };
 
-  const createGame = () => {
+  const createGame = async () => {
     const login = document.getElementById("login").value;
     if (!login) {
       alert("Please enter login");
     } else {
+
+      await tryRefreshSessionToken();
+      const token = localStorage.getItem("token");
+      if (!token || token == null) {
+        alert("You have to be correctly loged in to play a game!");
+        return;
+      }
+
+      console.log(`Token: ${token}`); 
+
       fetch(url  + "/game/start", {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           "login": login
         })
       })
-      .then(response => response.json())
+      .then(async response => {
+        if (!response.ok) {
+          // If the response is not OK, log the status and status text
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          const errorText = await response.text();
+          throw new Error(`Server responded with an error: ${errorText}`);
+        }
+        return response.json();
+      })
       .then(data => {
         setGameId(data.gameId);
         setPlayerType('X');
@@ -61,15 +80,24 @@ const TicTacToeGame = () => {
     }
   };
 
-  const connectToRandom = () => {
+  const connectToRandom = async () => {
     const login = document.getElementById("login").value;
     if (!login) {
       alert("Please enter login");
     } else {
+
+      await tryRefreshSessionToken();
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You have to be correctly loged in to play a game!");
+        return;
+      }
+
       fetch(url + "/game/connect/random", {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           "login": login
@@ -99,11 +127,20 @@ const TicTacToeGame = () => {
     }
   };
 
-  const makeAMove = (type, xCoordinate, yCoordinate) => {
+  const makeAMove = async (type, xCoordinate, yCoordinate) => {
+
+    await tryRefreshSessionToken();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You have to be correctly loged in to play a game!");
+      return;
+    }
+
     fetch(url + "/game/gameplay", {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
         "type": type,
@@ -142,12 +179,15 @@ const TicTacToeGame = () => {
     setTurns([["#", "#", "#"], ["#", "#", "#"], ["#", "#", "#"]]);
   };
 
+  const assertUserLogedIn = () => {
+    return localStorage.getItem('token'); 
+  }
+
   return (
     <div>
-      <Signup />
       <input type="text" id="login" placeholder="Enter login" />
-      <button onClick={createGame}>Create Game</button>
-      <button onClick={connectToRandom}>Connect to Random Game</button>
+      <button disabled={!assertUserLogedIn()} onClick={createGame}>Create Game</button>
+      <button disabled={!assertUserLogedIn()} onClick={connectToRandom}>Connect to Random Game</button>
       <ul id="gameBoard">
         {turns.map((row, i) => (
           row.map((cell, j) => (
@@ -158,8 +198,8 @@ const TicTacToeGame = () => {
         ))}
       </ul>
       <input id="game_id" placeholder="Paste game id"/>
-      <button onClick={connectToSocket}>Connect by game id</button>
-      <button onClick={reset}>Reset</button>
+      <button disabled={!assertUserLogedIn()} onClick={connectToSocket}>Connect by game id</button>
+      <button disabled={!assertUserLogedIn()} onClick={reset}>Reset</button>
       <div id="message"></div>
       <div className="clearfix"></div>
       <footer>

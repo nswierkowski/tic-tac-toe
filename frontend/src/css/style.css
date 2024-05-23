@@ -61,8 +61,18 @@ h1 {
     color: red !important;
 }
 
+.text-color {
+    color: white;
+}
+
 footer {
     display: block;
     text-align: center;
     padding-top: 20px;
+}
+
+.log-sign-container {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
 }
