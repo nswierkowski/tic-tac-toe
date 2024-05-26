@@ -9,6 +9,7 @@ import DropDownLogin from './components/DropDownLogin.js';
 import DropDownSignup from './components/DropDownSignup.js';
 import DropDownTicTacToe from './components/DropDownTicTacToe.js';
 import Status from './components/Status.js';
+import Logout from './components/Logout.js';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       <Account>
         <div className="log-sign-container">
           {/* <Status /> */}
+          <Logout />
           <DropDownLogin />
           <DropDownSignup />
         </div>

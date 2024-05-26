@@ -1,5 +1,7 @@
 FROM maven:3.8.4-openjdk-17 AS builder
 
+ENV REACT_USER_POOL_ID=us-east-1_U74pnUIz9
+
 WORKDIR /app
 
 COPY pom.xml .
